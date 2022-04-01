@@ -1,20 +1,19 @@
 let scene, camera, renderer, loader, cube, line, light, floor
-
+let sphere
 
 window.addEventListener("resize", onWindowResize, false)
 
 init()
 animate()
 
-
 function init() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer = new THREE.WebGLRenderer();
     loader = new THREE.GLTFLoader()
 
-    scene.background = new THREE.Color("#bbbbbb");
-    scene.fog = new THREE.Fog( "#fff", 20, 100 );
+    scene.background = new THREE.Color("#000");
+    scene.fog = new THREE.Fog( "#000", 20, 100 );
 
     renderer.setSize(window.innerWidth, window.innerHeight);
     camera.position.set(0, 0, 3)
@@ -48,7 +47,6 @@ function init() {
 
     floor = new THREE.Mesh(floor_geometry, floor_material)
     cube = new THREE.Mesh(cube_geometry, cube_material)
-    line = new THREE.Line(line_geometry, line_material)
 
     floor.receiveShadow = true
     floor.rotation.x = (-Math.PI / 2.0);
@@ -58,25 +56,23 @@ function init() {
 
     // scene.add(cube)
     scene.add(light)
-    scene.add(floor)
-    scene.add(line)
+    // scene.add(floor)
 
-    loader.load("../models/RoboAnt.gltf", function(gltf){
-        let obj = gltf.scene
-        obj.position.set(0, 0, -7)
-        obj.rotation.set(0, 11, 0)
-        scene.add(obj)
+    loader.load("../models/sphere.gltf", function(gltf){
+        sphere = gltf.scene
+        sphere.position.set(0, -1, -5)
+        sphere.rotation.set(0, 11, 0)
+        scene.add(sphere)
     }, undefined, function ( error ) {
-
         console.error( error );
-    
     } )
 }
 
 function animate () {
     requestAnimationFrame(animate);
 
-    cube.rotation.y += 0.01
+    sphere.rotation.y += 0.01
+    sphere.rotation.x += 0.01
 
     renderer.render(scene, camera)
 }
